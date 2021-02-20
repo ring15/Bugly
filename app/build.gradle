@@ -1,3 +1,7 @@
+import java.util.jar.JarEntry
+import java.util.jar.JarFile
+import java.util.jar.JarOutputStream
+
 apply plugin: 'com.android.application'
 
 android {
@@ -33,3 +37,111 @@ dependencies {
     implementation 'com.tencent.bugly:crashreport:3.0.0'
     implementation 'com.tencent.bugly:nativecrashreport:3.7.0'
 }
+
+//afterEvaluate {
+//    println ":====================="
+//}
+//
+//afterEvaluate {
+//    //debug/release两个variant,所以，所有的都进行这个操作
+//    //调用.all方法就是对集合进行遍历，类似foreach循环
+//    android.getApplicationVariants().all {
+//        variant ->
+//            //获得 debug/release
+//            String variantName = variant.getName()
+//            //首字母大写（用来找任务，因为带有的Debug或者Release任务的名字是因名称而异的）
+//            String capitalizeName = variantName.capitalize()
+//
+//            //通过任务名，获取task对象
+//            Task dexTask = project.getTasks().findByName("transformClassesWithDexBuilderFor" + capitalizeName)
+//
+//            dexTask.doFirst {
+//                //dexTask.getInputs()获取输入，两遍getFiles()是因为set集合比较熟悉，不调用第二遍也可以
+//                //任务的输入，dex打包任务，输入时所有的class和jar包
+//                Set<File> files = dexTask.getInputs().getFiles().getFiles()
+//
+//                for (File file : files) {
+//                    String filePath = file.getAbsolutePath()
+//                    if (filePath.endsWith(".jar")) {
+//                        processJar(file)
+//                    } else if (filePath.endsWith(".class")) {
+//                        processClass(variant.getDirName(), file)
+//                    }
+//                }
+//            }
+//    }
+//}
+//
+////class -> 插桩
+//static void processClass(String dirName, File file) {
+//    String filePath = file.getAbsolutePath()
+//    String className = filePath.split(dirName)[1].substring(1)
+//    if (className.startsWith("com/founq/sdk/bugly/MyApplication")
+//            || isAndroidClass(className)) {
+//        return
+//    }
+//    try {
+//        FileInputStream inputStream = new FileInputStream(filePath)
+//        //字节码插桩
+//        byte[] byteCode = referHackWhenInit(inputStream)
+//        inputStream.close()
+//        FileOutputStream outputStream = new FileOutputStream(filePath)
+//        outputStream.write(byteCode)
+//        outputStream.close()
+//    } catch (IOException e) {
+//        e.printStackTrace()
+//    }
+//}
+//
+////jar->class->插桩
+//static void processJar(File file) {
+//    try {
+//
+//        File bakJar = new File(file.getParent(), file.getName() + ".bak")
+//        JarOutputStream jarOutputStream = new JarOutputStream(new FileOutputStream(bakJar))
+//
+//        JarFile jarFile = new JarFile(file)
+//        Enumeration<JarEntry> entries = jarFile.entries()
+//        while (entries.hasMoreElements()) {
+//            JarEntry jarEntry = entries.nextElement()
+//
+//            jarOutputStream.putNextEntry(new JarEntry(jarEntry.getName()))
+//            InputStream inputStream = jarFile.getInputStream(jarEntry)
+//
+//            String className = jarEntry.getName()
+//            if (className.endsWith(".class") && !className.startsWith("com/founq/sdk/bugly/MyApplication")
+//                    && !isAndroidClass(className) && !className.startsWith("com/founq/sdk/patch")) {
+//                byte[] byteCode = referHackWhenInit(inputStream)
+//                jarOutputStream.write(byteCode)
+//            } else {
+//                ByteArrayOutputStream output = new ByteArrayOutputStream();
+//                byte[] buffer = new byte[4096]
+//                int n = 0
+//                while (-1 != (n = inputStream.read(buffer))) {
+//                    output.write(buffer, 0, n)
+//                }
+//                jarOutputStream.write(output.toByteArray())
+//            }
+//            jarOutputStream.closeEntry()
+//        }
+//        jarOutputStream.close()
+//        jarFile.close()
+//        file.delete()
+//        bakJar.renameTo(file)
+//    } catch (IOException e) {
+//        e.printStackTrace()
+//    }
+//}
+//
+////androidx或android support库没必要进行插桩
+//static boolean isAndroidClass(String filePath) {
+//    return filePath.startsWith("android") || filePath.startsWith("androidx")
+//}
+//
+//static byte[] referHackWhenInit(InputStream inputStream) throws IOException {
+////    ClassReader
+//}
+//
+//afterEvaluate {
+//    println ":========================="
+//}

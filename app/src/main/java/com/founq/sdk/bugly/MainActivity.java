@@ -38,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
 //                CrashReport.testJavaCrash();
                 break;
             case R.id.btn_test1:
-                CrashReport.testANRCrash();
+//                CrashReport.testANRCrash();
+                mTextView.setText("success");
                 break;
             case R.id.btn_test2:
                 nullpoint();
