@@ -2,6 +2,7 @@ package com.founq.sdk.bugly;
 
 import android.app.Application;
 
+import com.tencent.bugly.Bugly;
 import com.tencent.bugly.crashreport.CrashReport;
 
 /**
@@ -12,6 +13,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        CrashReport.initCrashReport(getApplicationContext(), "a0add45ce9", true);
+//        CrashReport.initCrashReport(getApplicationContext(), "a0add45ce9", true);
+        Bugly.init(getApplicationContext(), "a0add45ce9", true);
     }
 }
