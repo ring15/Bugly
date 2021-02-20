@@ -1,8 +1,17 @@
+import com.founq.sdk.plugin.MyPlugin
+
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
 
 apply plugin: 'com.android.application'
+
+apply plugin: MyPlugin
+
+androidx {
+    compileVersion 28
+    buildVersion "1.1"
+}
 
 android {
     compileSdkVersion 28
@@ -140,6 +149,14 @@ dependencies {
 //
 //static byte[] referHackWhenInit(InputStream inputStream) throws IOException {
 ////    ClassReader
+//
+//    ByteArrayOutputStream output = new ByteArrayOutputStream();
+//    byte[] buffer = new byte[4096]
+//    int n = 0
+//    while (-1 != (n = inputStream.read(buffer))) {
+//        output.write(buffer, 0, n)
+//    }
+//    return output.toByteArray()
 //}
 //
 //afterEvaluate {
